@@ -1,0 +1,8 @@
+.plans {
+    display: flex;
+    justify-content: space-between;
+}
+
+.plan {
+    border: black;
+}
