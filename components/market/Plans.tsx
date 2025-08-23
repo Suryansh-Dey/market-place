@@ -2,35 +2,75 @@ import "./Plans.css"
 import Plan from "./Plan"
 import type { PlanData } from "./Plan"
 
-let plans: PlanData[] | null = null
-async function getPlans(orgId: string): Promise<PlanData[]> {
-    if (plans) return plans
-    const response = await fetch("https://train.vinaiak.com/login/")
-    const data = await response.text()
-    plans = [
-        {
-            name: "Bhrast planner",
-            route: ["swarg", "patal", "nark"],
-            price: 70000000,
-            image: "https://staticimg.amarujala.com/assets/images/2016/11/22/nark_1479815907.jpeg",
-            description: "Paise lao fir description padhna. " + data[0] + orgId
-        },
-        {
-            name: "Roller coster",
-            route: ["niche", "bichme", "uppar"],
-            price: 7,
-            image: "https://t4.ftcdn.net/jpg/03/20/00/21/240_F_320002102_Mtgit9EEEutS4yq3A7kl2pGb4VKO6IQI.jpg",
-            description: "Spelling nhi aata.. description itna hi hai"
+// Fetch plans from DynamoDB via API route
+async function getPlans(agencyId: string = "default-agency"): Promise<PlanData[]> {
+    try {
+        // Fetch from our API route that connects to DynamoDB
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/plans?agencyId=${agencyId}`, {
+            cache: 'no-store' // Ensure fresh data
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch plans: ${response.statusText}`);
         }
-    ]
-    return plans
+        
+        const data = await response.json();
+        
+        // Data from DynamoDB already matches our PlanData interface
+        return data.plans as PlanData[];
+    } catch (error) {
+        console.error("Error fetching plans from DynamoDB:", error);
+        
+        // Return fallback data if API fails (with all required fields)
+        return [
+            {
+                planId: "fallback-001",
+                agencyId: agencyId,
+                name: "Sample Plan (DB Connection Required)",
+                route: ["Start", "Destination"],
+                price: 0,
+                image: "https://via.placeholder.com/400x300?text=Configure+DynamoDB",
+                description: "Unable to connect to DynamoDB. Please configure your AWS credentials in .env.local file.",
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                isActive: true
+            }
+        ];
+    }
 }
+
 export default async function Plans() {
-    const response = await getPlans('1')
-    const plans = response.map((plan, i) => <Plan key={i} plan={plan} editable={true} />)
+    // You can change the agencyId based on the logged-in agency
+    const agencyId = "default-agency";
+    const plans = await getPlans(agencyId);
+    
+    // Filter to show only active plans
+    const activePlans = plans.filter(plan => plan.isActive);
+    
+    const planComponents = activePlans.map((plan) => 
+        <Plan key={plan.planId} plan={plan} editable={true} />
+    );
+    
     return (
         <div className="plans">
-            {plans}
+            <div className="plans-header mb-4">
+                <h2 className="text-2xl font-bold">Travel Plans Dashboard</h2>
+                <p className="text-sm text-gray-600">Agency: {agencyId}</p>
+                <p className="text-sm text-gray-600">Total Active Plans: {activePlans.length}</p>
+            </div>
+            {planComponents}
+            {activePlans.length === 0 && (
+                <div className="text-center py-8">
+                    <p className="text-gray-500">
+                        No active plans available.
+                    </p>
+                    <p className="text-sm text-gray-400 mt-2">
+                        {plans.length > 0 
+                            ? `(${plans.length} inactive plans hidden)`
+                            : "Create your first travel plan or check DynamoDB connection!"}
+                    </p>
+                </div>
+            )}
         </div>
     )
 }
