@@ -7,7 +7,7 @@ import { Edit3, MapPin, Calendar, Building, Activity } from "lucide-react";
 // Updated PlanData interface to match DynamoDB schema
 export type PlanData = {
   planId: string;
-  agencyId: string;
+  vendorId: string;
   name: string;
   image: string;
   route: string[];
@@ -139,7 +139,7 @@ function PlanDisplay({
           <div className="grid grid-cols-2 gap-3 text-xs text-gray-500 dark:text-gray-400">
             <div className="flex items-center">
               <Building className="w-3 h-3 mr-1" />
-              <span className="truncate">Agency: {plan.agencyId}</span>
+              <span className="truncate">Vendor: {plan.vendorId}</span>
             </div>
             <div className="flex items-center">
               <Calendar className="w-3 h-3 mr-1" />

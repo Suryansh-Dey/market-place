@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
+import AuthProvider from "@/components/AuthProvider";
 
 export default function RootLayout({
     children,
@@ -12,6 +13,7 @@ export default function RootLayout({
             <html lang="en" suppressHydrationWarning>
                 <head />
                 <body>
+                    <AuthProvider>
                     <ThemeProvider
                         attribute="class"
                         defaultTheme="system"
@@ -21,6 +23,7 @@ export default function RootLayout({
                         <Navbar />
                         {children}
                     </ThemeProvider>
+                    </AuthProvider>
                 </body>
             </html>
         </>

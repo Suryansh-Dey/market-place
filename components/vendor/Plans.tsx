@@ -2,10 +2,10 @@ import Plan from "./Plan"
 import type { PlanData } from "./Plan"
 
 // Fetch plans from DynamoDB via API route
-async function getPlans(agencyId: string = "default-agency"): Promise<PlanData[]> {
+async function getPlans(vendorId: string = "default-vendor"): Promise<PlanData[]> {
     try {
         // Fetch from our API route that connects to DynamoDB
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/plans?agencyId=${agencyId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/plans?vendorId=${vendorId}`, {
             cache: 'no-store' // Ensure fresh data
         });
         
@@ -24,7 +24,7 @@ async function getPlans(agencyId: string = "default-agency"): Promise<PlanData[]
         return [
             {
                 planId: "fallback-001",
-                agencyId: agencyId,
+                vendorId: vendorId,
                 name: "Sample Plan (DB Connection Required)",
                 route: ["Start", "Destination"],
                 price: 0,
@@ -40,8 +40,8 @@ async function getPlans(agencyId: string = "default-agency"): Promise<PlanData[]
 
 export default async function Plans() {
     // You can change the agencyId based on the logged-in agency
-    const agencyId = "default-agency";
-    const plans = await getPlans(agencyId);
+    const vendorId = "default-vendor";
+    const plans = await getPlans(vendorId);
     
     // Filter to show only active plans
     const activePlans = plans.filter(plan => plan.isActive);
@@ -61,7 +61,7 @@ export default async function Plans() {
                         Manage your travel experiences
                     </p>
                     <div className="text-sm text-gray-500 dark:text-gray-400 space-y-1">
-                        <p>Agency: <span className="font-medium">{agencyId}</span></p>
+                        <p>Vendor: <span className="font-medium">{vendorId}</span></p>
                         <p>Active Plans: <span className="font-medium text-green-600 dark:text-green-400">{activePlans.length}</span></p>
                     </div>
                 </div>

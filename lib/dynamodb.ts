@@ -18,13 +18,30 @@ export const dynamoDb = DynamoDBDocumentClient.from(client, {
   },
 });
 
-// Table name for travel plans
+// Table names
 export const PLANS_TABLE = process.env.DYNAMODB_PLANS_TABLE || "TravelPlans";
+export const USERS_TABLE = process.env.DYNAMODB_USERS_TABLE || "Users";
+export const BOOKINGS_TABLE = process.env.DYNAMODB_BOOKINGS_TABLE || "Bookings";
 
-// Type definition for a Plan item in DynamoDB
+// Type definitions for DynamoDB items
+export interface DynamoDBUser {
+  userId: string;
+  name: string;
+  email: string;
+  image?: string;
+  role: "user" | "vendor" | "admin";
+  vendorVerified: boolean;
+  vendorInfo?: {
+    organizationName?: string;
+    address?: string;
+    phoneNumber?: string;
+  };
+  createdAt: string;
+}
+
 export interface DynamoDBPlan {
   planId: string;
-  agencyId: string;
+  vendorId: string;
   name: string;
   image: string;
   route: string[];
@@ -33,4 +50,15 @@ export interface DynamoDBPlan {
   createdAt: string;
   updatedAt: string;
   isActive: boolean;
+}
+
+export interface DynamoDBBooking {
+  bookingId: string;
+  planId: string;
+  userId: string;
+  dateBooked: string;
+  numPeople: number;
+  paymentStatus: "pending" | "completed" | "failed";
+  totalAmount: number;
+  createdAt: string;
 }

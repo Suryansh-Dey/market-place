@@ -1,4 +1,4 @@
-import Plans from "@/components/market/Plans";
+import Plans from "@/components/vendor/Plans";
 
 export default function page() {
     return (

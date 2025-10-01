@@ -10,13 +10,13 @@ export async function GET(
   try {
     const planId = params.id;
     const searchParams = request.nextUrl.searchParams;
-    const agencyId = searchParams.get("agencyId") || "default-agency";
+    const vendorId = searchParams.get("vendorId") || "default-vendor";
 
     const command = new GetCommand({
       TableName: PLANS_TABLE,
       Key: {
         planId,
-        agencyId,
+        vendorId,
       },
     });
 
@@ -47,7 +47,7 @@ export async function PUT(
   try {
     const planId = params.id;
     const body = await request.json();
-    const { agencyId = "default-agency", ...updates } = body;
+    const { vendorId = "default-vendor", ...updates } = body;
 
     // Build update expression
     const updateExpressions: string[] = ["updatedAt = :updatedAt"];
@@ -71,7 +71,7 @@ export async function PUT(
       TableName: PLANS_TABLE,
       Key: {
         planId,
-        agencyId,
+        vendorId,
       },
       UpdateExpression: `SET ${updateExpressions.join(", ")}`,
       ExpressionAttributeNames: expressionAttributeNames,
@@ -102,14 +102,14 @@ export async function DELETE(
   try {
     const planId = params.id;
     const searchParams = request.nextUrl.searchParams;
-    const agencyId = searchParams.get("agencyId") || "default-agency";
+    const vendorId = searchParams.get("vendorId") || "default-vendor";
 
     // Soft delete by setting isActive to false
     const command = new UpdateCommand({
       TableName: PLANS_TABLE,
       Key: {
         planId,
-        agencyId,
+        vendorId,
       },
       UpdateExpression: "SET isActive = :isActive, updatedAt = :updatedAt",
       ExpressionAttributeValues: {
