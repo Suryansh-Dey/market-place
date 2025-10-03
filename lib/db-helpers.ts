@@ -96,15 +96,12 @@ export async function getPendingVendors(): Promise<DynamoDBUser[]> {
 
 export async function getPlanById(planId: string): Promise<DynamoDBPlan | null> {
   try {
-    const command = new ScanCommand({
+    const command = new GetCommand({
       TableName: PLANS_TABLE,
-      FilterExpression: "planId = :planId",
-      ExpressionAttributeValues: {
-        ":planId": planId,
-      },
+      Key: { planId },
     });
     const response = await dynamoDb.send(command);
-    return response.Items && response.Items.length > 0 ? response.Items[0] as DynamoDBPlan : null;
+    return (response.Item as DynamoDBPlan) || null;
   } catch (error) {
     console.error("Error getting plan by ID:", error);
     return null;
@@ -160,7 +157,7 @@ export async function updatePlan(planId: string, updates: Partial<DynamoDBPlan>)
   const expressionAttributeNames: any = {};
 
   Object.entries(updates).forEach(([key, value], index) => {
-    if (key !== "planId" && key !== "vendorId") {
+    if (key !== "planId") {
       const attributeName = `#attr${index}`;
       const attributeValue = `:val${index}`;
       updateExpressions.push(`${attributeName} = ${attributeValue}`);
@@ -171,25 +168,9 @@ export async function updatePlan(planId: string, updates: Partial<DynamoDBPlan>)
 
   if (updateExpressions.length === 0) return;
 
-  // We need to scan first to find the item since we don't have the sort key
-  const scanCommand = new ScanCommand({
-    TableName: PLANS_TABLE,
-    FilterExpression: "planId = :planId",
-    ExpressionAttributeValues: {
-      ":planId": planId,
-    },
-  });
-  const scanResponse = await dynamoDb.send(scanCommand);
-  
-  if (!scanResponse.Items || scanResponse.Items.length === 0) {
-    throw new Error("Plan not found");
-  }
-
-  const plan = scanResponse.Items[0] as DynamoDBPlan;
-
   const command = new UpdateCommand({
     TableName: PLANS_TABLE,
-    Key: { planId: plan.planId, vendorId: plan.vendorId },
+    Key: { planId },
     UpdateExpression: `SET ${updateExpressions.join(", ")}`,
     ExpressionAttributeNames: expressionAttributeNames,
     ExpressionAttributeValues: expressionAttributeValues,
@@ -199,8 +180,11 @@ export async function updatePlan(planId: string, updates: Partial<DynamoDBPlan>)
 }
 
 export async function deletePlan(planId: string): Promise<void> {
-  // Soft delete - just set isActive to false
-  await updatePlan(planId, { isActive: false });
+  const command = new DeleteCommand({
+    TableName: PLANS_TABLE,
+    Key: { planId },
+  });
+  await dynamoDb.send(command);
 }
 
 // ============ BOOKING OPERATIONS ============

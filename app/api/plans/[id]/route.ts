@@ -8,16 +8,11 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const planId = params.id;
-    const searchParams = request.nextUrl.searchParams;
-    const vendorId = searchParams.get("vendorId") || "default-vendor";
+    const planId = (await params as any).id ?? params.id;
 
     const command = new GetCommand({
       TableName: PLANS_TABLE,
-      Key: {
-        planId,
-        vendorId,
-      },
+      Key: { planId },
     });
 
     const response = await dynamoDb.send(command);
@@ -45,9 +40,9 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const planId = params.id;
+    const planId = (await params as any).id ?? params.id;
     const body = await request.json();
-    const { vendorId = "default-vendor", ...updates } = body;
+    const { ...updates } = body;
 
     // Build update expression
     const updateExpressions: string[] = ["updatedAt = :updatedAt"];
@@ -69,10 +64,7 @@ export async function PUT(
 
     const command = new UpdateCommand({
       TableName: PLANS_TABLE,
-      Key: {
-        planId,
-        vendorId,
-      },
+      Key: { planId },
       UpdateExpression: `SET ${updateExpressions.join(", ")}`,
       ExpressionAttributeNames: expressionAttributeNames,
       ExpressionAttributeValues: expressionAttributeValues,
@@ -94,37 +86,23 @@ export async function PUT(
   }
 }
 
-// DELETE - Delete a plan (soft delete by setting isActive to false)
+// DELETE - Delete a plan (HARD DELETE)
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const planId = params.id;
-    const searchParams = request.nextUrl.searchParams;
-    const vendorId = searchParams.get("vendorId") || "default-vendor";
+    const planId = (await params as any).id ?? params.id;
 
-    // Soft delete by setting isActive to false
-    const command = new UpdateCommand({
+    // Hard delete
+    const command = new DeleteCommand({
       TableName: PLANS_TABLE,
-      Key: {
-        planId,
-        vendorId,
-      },
-      UpdateExpression: "SET isActive = :isActive, updatedAt = :updatedAt",
-      ExpressionAttributeValues: {
-        ":isActive": false,
-        ":updatedAt": new Date().toISOString(),
-      },
-      ReturnValues: "ALL_NEW",
+      Key: { planId },
     });
 
-    const response = await dynamoDb.send(command);
+    await dynamoDb.send(command);
 
-    return NextResponse.json({
-      message: "Plan deleted successfully",
-      plan: response.Attributes,
-    });
+    return NextResponse.json({ message: "Plan deleted successfully" });
   } catch (error) {
     console.error("Error deleting plan:", error);
     return NextResponse.json(

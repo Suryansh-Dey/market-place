@@ -9,21 +9,19 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const vendorId = searchParams.get("vendorId");
 
-    // Scan the table for plans; if vendorId provided, filter by it, else return all active
-    const command = new ScanCommand({
-      TableName: PLANS_TABLE,
-      FilterExpression: vendorId
-        ? "vendorId = :vendorId AND isActive = :isActive"
-        : "isActive = :isActive",
-      ExpressionAttributeValues: vendorId
-        ? {
-            ":vendorId": vendorId,
-            ":isActive": true,
-          }
-        : {
-            ":isActive": true,
-          },
-    });
+    // If vendorId provided: return ALL vendor plans (active + inactive) for dashboard
+    // Else: public listing → only active plans
+    const command = vendorId
+      ? new ScanCommand({
+          TableName: PLANS_TABLE,
+          FilterExpression: "vendorId = :vendorId",
+          ExpressionAttributeValues: { ":vendorId": vendorId },
+        })
+      : new ScanCommand({
+          TableName: PLANS_TABLE,
+          FilterExpression: "isActive = :isActive",
+          ExpressionAttributeValues: { ":isActive": true },
+        });
 
     const response = await dynamoDb.send(command);
     const plans = response.Items || [];

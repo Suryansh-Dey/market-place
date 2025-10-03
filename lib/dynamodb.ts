@@ -28,6 +28,7 @@ export interface DynamoDBUser {
   userId: string;
   name: string;
   email: string;
+  password?: string; // Optional - only for email/password auth
   image?: string;
   role: "user" | "vendor" | "admin";
   vendorVerified: boolean;
