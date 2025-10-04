@@ -7,17 +7,21 @@ import { randomUUID } from "crypto";
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    const agencyId = searchParams.get("agencyId") || "default-agency";
+    const vendorId = searchParams.get("vendorId");
 
-    // Scan the table for plans
-    const command = new ScanCommand({
-      TableName: PLANS_TABLE,
-      FilterExpression: "agencyId = :agencyId AND isActive = :isActive",
-      ExpressionAttributeValues: {
-        ":agencyId": agencyId,
-        ":isActive": true,
-      },
-    });
+    // If vendorId provided: return ALL vendor plans (active + inactive) for dashboard
+    // Else: public listing → only active plans
+    const command = vendorId
+      ? new ScanCommand({
+          TableName: PLANS_TABLE,
+          FilterExpression: "vendorId = :vendorId",
+          ExpressionAttributeValues: { ":vendorId": vendorId },
+        })
+      : new ScanCommand({
+          TableName: PLANS_TABLE,
+          FilterExpression: "isActive = :isActive",
+          ExpressionAttributeValues: { ":isActive": true },
+        });
 
     const response = await dynamoDb.send(command);
     const plans = response.Items || [];
@@ -37,7 +41,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const {
-      agencyId = "default-agency",
+      vendorId = "default-vendor",
       name,
       image,
       route,
@@ -56,7 +60,7 @@ export async function POST(request: NextRequest) {
     const now = new Date().toISOString();
     const plan: DynamoDBPlan = {
       planId: randomUUID(),
-      agencyId,
+      vendorId,
       name,
       image: image || "",
       route: Array.isArray(route) ? route : [route],
