@@ -2,10 +2,18 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Button } from "@/components/common/button";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Edit3, Trash2, MapPin, Calendar, DollarSign, Activity, AlertTriangle } from "lucide-react";
+import {
+  Edit3,
+  Trash2,
+  MapPin,
+  Calendar,
+  DollarSign,
+  Activity,
+  AlertTriangle,
+} from "lucide-react";
 
 interface TripCardProps {
   trip: {
@@ -33,7 +41,7 @@ export function TripCard({ trip, onUpdate }: TripCardProps) {
       const response = await fetch(`/api/plans/${trip.planId}`, {
         method: "DELETE",
       });
-      
+
       if (response.ok) {
         setConfirmOpen(false);
         onUpdate();
@@ -53,7 +61,7 @@ export function TripCard({ trip, onUpdate }: TripCardProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isActive: !trip.isActive }),
       });
-      
+
       if (response.ok) {
         onUpdate();
       }
@@ -69,7 +77,10 @@ export function TripCard({ trip, onUpdate }: TripCardProps) {
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
         <Image
-          src={trip.image || "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=500"}
+          src={
+            trip.image ||
+            "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=500"
+          }
           alt={trip.name}
           fill
           className="object-cover transition-transform duration-300 hover:scale-105"
@@ -88,7 +99,9 @@ export function TripCard({ trip, onUpdate }: TripCardProps) {
         </h3>
         <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
           <MapPin className="w-4 h-4 mr-1" />
-          <span>{trip.route[0]} → {trip.route[trip.route.length - 1]}</span>
+          <span>
+            {trip.route[0]} → {trip.route[trip.route.length - 1]}
+          </span>
         </div>
       </CardHeader>
 
@@ -101,8 +114,8 @@ export function TripCard({ trip, onUpdate }: TripCardProps) {
         {/* Price */}
         <div className="flex items-center justify-between">
           <div className="flex items-center text-lg font-bold text-blue-600 dark:text-blue-400">
-            <DollarSign className="w-4 h-4 mr-1" />
-            ₹{trip.price.toLocaleString()}
+            <DollarSign className="w-4 h-4 mr-1" />₹
+            {trip.price.toLocaleString()}
           </div>
           <div className="text-xs text-gray-500 dark:text-gray-400">
             <Calendar className="w-3 h-3 inline mr-1" />
@@ -149,9 +162,12 @@ export function TripCard({ trip, onUpdate }: TripCardProps) {
             <div className="flex items-start gap-3">
               <AlertTriangle className="w-6 h-6 text-red-500 mt-1" />
               <div>
-                <h4 className="text-lg font-semibold text-gray-900 dark:text-white">Delete this trip?</h4>
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Delete this trip?
+                </h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  This will permanently delete the trip from the database. This action cannot be undone.
+                  This will permanently delete the trip from the database. This
+                  action cannot be undone.
                 </p>
               </div>
             </div>
@@ -159,7 +175,11 @@ export function TripCard({ trip, onUpdate }: TripCardProps) {
               <Button variant="outline" onClick={() => setConfirmOpen(false)}>
                 Cancel
               </Button>
-              <Button className="bg-red-600 hover:bg-red-700 text-white" onClick={handleDelete} disabled={loading}>
+              <Button
+                className="bg-red-600 hover:bg-red-700 text-white"
+                onClick={handleDelete}
+                disabled={loading}
+              >
                 {loading ? "Deleting..." : "Delete"}
               </Button>
             </div>

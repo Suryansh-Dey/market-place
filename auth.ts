@@ -27,7 +27,14 @@ const config: NextAuthConfig = {
         const existingUser = await getUserByEmail(credentials.email as string);
 
         if (!existingUser) {
-          throw new Error("No user found with this email");
+          throw new Error("No vendor account found with this email");
+        }
+
+        // Only allow vendors to sign in
+        if (existingUser.role !== "vendor") {
+          throw new Error(
+            "This platform is for vendors only. Please use the main Explorify website."
+          );
         }
 
         if (!existingUser.password) {
@@ -55,28 +62,30 @@ const config: NextAuthConfig = {
     }),
   ],
   callbacks: {
-
-    //sign up logic is implemented separately in app/api/auth/signup/route.ts
-    
     async signIn({ user, account }: any) {
       if (!user?.email) return false;
 
-      // Only create user for OAuth providers (Google)
+      // For OAuth (Google) sign in
       if (account?.provider === "google") {
         const existing = await getUserByEmail(user.email);
 
         if (!existing) {
-          console.log("Creating new user:", user.email);
+          // Auto-create vendor account for new Google users
+          console.log("Creating new vendor:", user.email);
 
           await createUser({
             userId: randomUUID(),
             name: user.name || "",
             email: user.email,
             image: user.image || undefined,
-            role: "user",
-            vendorVerified: false,
+            role: "vendor",
+            vendorVerified: false, // Needs admin verification
             createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
           });
+        } else if (existing.role !== "vendor") {
+          // Prevent non-vendors from signing in
+          return false;
         }
       }
 
@@ -86,6 +95,10 @@ const config: NextAuthConfig = {
       if (session.user && token.email) {
         const dbUser = await getUserByEmail(token.email);
         if (dbUser) {
+          // Only allow vendors
+          if (dbUser.role !== "vendor") {
+            return null;
+          }
           session.user.id = dbUser.userId;
           session.user.role = dbUser.role;
           session.user.vendorVerified = dbUser.vendorVerified;
@@ -97,8 +110,7 @@ const config: NextAuthConfig = {
       if (user?.email) token.email = user.email;
       if (token.email) {
         const dbUser = await getUserByEmail(token.email);
-        if (dbUser) {
-          // enrich token for middleware
+        if (dbUser && dbUser.role === "vendor") {
           token.role = dbUser.role;
           token.vendorVerified = dbUser.vendorVerified;
           token.userId = dbUser.userId;

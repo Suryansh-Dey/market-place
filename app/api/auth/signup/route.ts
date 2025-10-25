@@ -6,7 +6,8 @@ import { DynamoDBUser } from "@/lib/dynamodb";
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password, name, role = "user" } = await request.json();
+    const { email, password, name, organizationName, phoneNumber, address } =
+      await request.json();
 
     // Validate required fields
     if (!email || !password || !name) {
@@ -33,54 +34,51 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if user already exists
+    // Check if vendor already exists
     const existingUser = await getUserByEmail(email);
     if (existingUser) {
       return NextResponse.json(
-        { error: "User with this email already exists" },
+        { error: "A vendor account with this email already exists" },
         { status: 409 }
       );
     }
 
-    // Hash password using your existing helper
+    // Hash password
     const hashedPassword = await hashPassword(password);
 
-    // Create user
+    // Create vendor account
     const now = new Date().toISOString();
-    const newUser: DynamoDBUser = {
+    const newVendor: DynamoDBUser = {
       userId: randomUUID(),
       email,
       name,
       password: hashedPassword,
-      role: role as "user" | "vendor" | "admin",
-      vendorVerified: false,
+      role: "vendor",
+      vendorVerified: false, // Requires admin approval
+      vendorInfo: {
+        organizationName: organizationName || "",
+        phoneNumber: phoneNumber || "",
+        address: address || "",
+      },
       createdAt: now,
+      updatedAt: now,
     };
 
-    await createUser(newUser);
+    await createUser(newVendor);
 
-    // Determine redirect URL based on role
-    let redirectUrl = "/trips"; // default for users
-    if (role === "vendor") {
-      redirectUrl = "/vendor/dashboard";
-    } else if (role === "admin") {
-      redirectUrl = "/admin/dashboard";
-    }
-
-    // Return user data WITHOUT the password field (for security)
-    // We destructure to remove password and return safe user data
-    const { password: _, ...safeUserData } = newUser;
+    // Return vendor data without password
+    const { password: _, ...safeVendorData } = newVendor;
 
     return NextResponse.json(
       {
-        message: "User created successfully",
-        user: safeUserData,
-        redirectUrl, // ✅ Added redirect URL based on role
+        message: "Vendor account created successfully. Awaiting admin verification.",
+        vendor: safeVendorData,
+        redirectUrl: "/dashboard",
       },
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error creating user:", error);
+    console.error("Error creating vendor:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
