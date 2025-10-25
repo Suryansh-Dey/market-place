@@ -1,10 +1,24 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/common/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Plus, MapPin, Calendar, Users, CheckCircle, AlertCircle, Upload } from "lucide-react";
+import {
+  Plus,
+  MapPin,
+  Calendar,
+  Users,
+  CheckCircle,
+  AlertCircle,
+  Upload,
+} from "lucide-react";
 import { TripForm } from "@/components/vendor/TripForm";
 import { TripCard } from "@/components/vendor/TripCard";
 
@@ -32,7 +46,7 @@ export default function VendorDashboard({ user }: VendorDashboardProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: user.id }),
       });
-      
+
       if (response.ok) {
         setIsVerified(true);
       }
@@ -87,10 +101,9 @@ export default function VendorDashboard({ user }: VendorDashboardProps) {
                     {isVerified ? "Verified Vendor" : "Verification Required"}
                   </CardTitle>
                   <CardDescription>
-                    {isVerified 
-                      ? "You're verified and can start offering trips" 
-                      : "Get verified to start offering your travel experiences"
-                    }
+                    {isVerified
+                      ? "You're verified and can start offering trips"
+                      : "Get verified to start offering your travel experiences"}
                   </CardDescription>
                 </div>
               </div>
@@ -101,8 +114,8 @@ export default function VendorDashboard({ user }: VendorDashboardProps) {
           </CardHeader>
           {!isVerified && (
             <CardContent>
-              <Button 
-                onClick={handleGetVerified} 
+              <Button
+                onClick={handleGetVerified}
                 disabled={loading}
                 className="bg-blue-600 hover:bg-blue-700 text-white"
               >
@@ -119,8 +132,12 @@ export default function VendorDashboard({ user }: VendorDashboardProps) {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Trips</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{trips.length}</p>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      Total Trips
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {trips.length}
+                    </p>
                   </div>
                   <MapPin className="w-8 h-8 text-blue-500" />
                 </div>
@@ -131,7 +148,9 @@ export default function VendorDashboard({ user }: VendorDashboardProps) {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Active Trips</p>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      Active Trips
+                    </p>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white">
                       {trips.filter((trip: any) => trip.isActive).length}
                     </p>
@@ -145,8 +164,12 @@ export default function VendorDashboard({ user }: VendorDashboardProps) {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Bookings</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">0</p>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      Total Bookings
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                      0
+                    </p>
                   </div>
                   <Users className="w-8 h-8 text-purple-500" />
                 </div>
@@ -159,8 +182,10 @@ export default function VendorDashboard({ user }: VendorDashboardProps) {
         {isVerified && (
           <div className="space-y-10">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Your Trips</h2>
-              <Button 
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                Your Trips
+              </h2>
+              <Button
                 onClick={() => setShowTripForm(true)}
                 className="bg-blue-600 hover:bg-blue-700 text-white"
               >
@@ -171,7 +196,7 @@ export default function VendorDashboard({ user }: VendorDashboardProps) {
 
             {/* Trip Form Modal */}
             {showTripForm && (
-              <TripForm 
+              <TripForm
                 onClose={() => setShowTripForm(false)}
                 onSuccess={() => {
                   setShowTripForm(false);
@@ -183,32 +208,52 @@ export default function VendorDashboard({ user }: VendorDashboardProps) {
 
             {/* Active Trips */}
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Active Trips</h3>
-              {trips.filter(t => t.isActive).length > 0 ? (
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                Active Trips
+              </h3>
+              {trips.filter((t) => t.isActive).length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {trips.filter(t => t.isActive).map((trip) => (
-                    <TripCard key={trip.planId} trip={trip} onUpdate={fetchTrips} />
-                  ))}
+                  {trips
+                    .filter((t) => t.isActive)
+                    .map((trip) => (
+                      <TripCard
+                        key={trip.planId}
+                        trip={trip}
+                        onUpdate={fetchTrips}
+                      />
+                    ))}
                 </div>
               ) : (
                 <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                  <CardContent className="p-8 text-center text-gray-600 dark:text-gray-400">No active trips</CardContent>
+                  <CardContent className="p-8 text-center text-gray-600 dark:text-gray-400">
+                    No active trips
+                  </CardContent>
                 </Card>
               )}
             </div>
 
             {/* Inactive Trips */}
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Inactive Trips</h3>
-              {trips.filter(t => !t.isActive).length > 0 ? (
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                Inactive Trips
+              </h3>
+              {trips.filter((t) => !t.isActive).length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {trips.filter(t => !t.isActive).map((trip) => (
-                    <TripCard key={trip.planId} trip={trip} onUpdate={fetchTrips} />
-                  ))}
+                  {trips
+                    .filter((t) => !t.isActive)
+                    .map((trip) => (
+                      <TripCard
+                        key={trip.planId}
+                        trip={trip}
+                        onUpdate={fetchTrips}
+                      />
+                    ))}
                 </div>
               ) : (
                 <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                  <CardContent className="p-8 text-center text-gray-600 dark:text-gray-400">No inactive trips</CardContent>
+                  <CardContent className="p-8 text-center text-gray-600 dark:text-gray-400">
+                    No inactive trips
+                  </CardContent>
                 </Card>
               )}
             </div>
@@ -224,7 +269,7 @@ export default function VendorDashboard({ user }: VendorDashboardProps) {
                   <p className="text-gray-600 dark:text-gray-400 mb-6">
                     Start by adding your first travel experience
                   </p>
-                  <Button 
+                  <Button
                     onClick={() => setShowTripForm(true)}
                     className="bg-blue-600 hover:bg-blue-700 text-white"
                   >

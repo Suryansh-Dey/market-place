@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/common/button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -19,30 +19,14 @@ import {
   Trophy,
   Clock,
   HeartHandshake,
-  MapPin,
-  ChevronRight,
-  Quote,
-  Plane,
-  Camera,
-  Calendar,
-  Search,
-  Filter,
-  Heart,
-  ThumbsUp,
-  Award,
-  Compass,
-  Mountain,
-  Waves,
-  TreePine,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
-export default function HomePage() {
+export default function VendorLandingPage() {
   const { data: session } = useSession();
   const router = useRouter();
   const [scrollY, setScrollY] = useState(0);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [activeTab, setActiveTab] = useState("adventures");
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -50,181 +34,122 @@ export default function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleExplore = () => {
+  const handleGetStarted = () => {
     if (session) {
-      router.push("/trips");
+      router.push("/dashboard");
     } else {
       router.push("/auth/signin");
     }
   };
 
   const stats = [
-    { value: "100+", label: "Destinations", icon: Globe },
-    { value: "50+", label: "Happy Travelers", icon: Users },
-    { value: "4.9★", label: "Average Rating", icon: Star },
-    { value: "20+", label: "Trusted Vendors", icon: Shield },
-  ];
-
-  const categories = [
-    {
-      id: "adventures",
-      icon: Mountain,
-      title: "Adventures",
-      description: "Thrilling outdoor experiences",
-      gradient: "from-orange-500 to-red-500",
-    },
-    {
-      id: "cultural",
-      icon: Camera,
-      title: "Cultural Tours",
-      description: "Discover local traditions",
-      gradient: "from-purple-500 to-pink-500",
-    },
-    {
-      id: "relaxation",
-      icon: Waves,
-      title: "Beach & Relax",
-      description: "Peaceful getaways",
-      gradient: "from-blue-500 to-cyan-500",
-    },
-    {
-      id: "nature",
-      icon: TreePine,
-      title: "Nature Trails",
-      description: "Explore pristine wilderness",
-      gradient: "from-green-500 to-emerald-500",
-    },
+    { value: "20+", label: "Active Vendors", icon: Users },
+    { value: "500+", label: "Happy Travelers", icon: Globe },
+    { value: "95%", label: "Satisfaction Rate", icon: Star },
+    { value: "10+", label: "Countries", icon: TrendingUp },
   ];
 
   const features = [
     {
-      icon: Search,
-      title: "Easy Discovery",
-      description: "Find your perfect trip with our smart search and filters",
+      icon: Globe,
+      title: "Global Reach",
+      description:
+        "Connect with travelers from around the world looking for authentic experiences.",
       gradient: "from-blue-500 to-cyan-500",
     },
     {
+      icon: DollarSign,
+      title: "Competitive Earnings",
+      description:
+        "Keep 85% of your earnings with our fair commission structure.",
+      gradient: "from-green-500 to-emerald-500",
+    },
+    {
       icon: Shield,
-      title: "Secure Booking",
-      description: "Book with confidence using our secure payment system",
+      title: "Secure Platform",
+      description: "Safe and secure payment processing with fraud protection.",
       gradient: "from-purple-500 to-pink-500",
     },
     {
-      icon: Users,
-      title: "Verified Vendors",
-      description: "All our travel partners are thoroughly vetted and verified",
+      icon: BarChart3,
+      title: "Analytics Dashboard",
+      description: "Track your performance with detailed insights and reports.",
       gradient: "from-orange-500 to-red-500",
     },
     {
       icon: Zap,
-      title: "Instant Confirmation",
-      description: "Get immediate booking confirmation and travel documents",
-      gradient: "from-green-500 to-emerald-500",
+      title: "Instant Bookings",
+      description:
+        "Receive real-time notifications and manage bookings efficiently.",
+      gradient: "from-yellow-500 to-orange-500",
     },
     {
       icon: HeartHandshake,
-      title: "24/7 Support",
-      description: "Round-the-clock customer support for your peace of mind",
-      gradient: "from-indigo-500 to-blue-500",
-    },
-    {
-      icon: Award,
-      title: "Best Price Guarantee",
-      description:
-        "We guarantee you the best prices or we'll match the difference",
-      gradient: "from-yellow-500 to-orange-500",
+      title: "Dedicated Support",
+      description: "24/7 vendor support to help you grow your business.",
+      gradient: "from-indigo-500 to-purple-500",
     },
   ];
 
-  const featuredDestinations = [
-    {
-      name: "Santorini, Greece",
-      image: "🏛️",
-      price: "$299",
-      duration: "3 Days",
-      rating: 4.8,
-      reviews: 124,
-      type: "Cultural",
-    },
-    {
-      name: "Bali, Indonesia",
-      image: "🏖️",
-      price: "$199",
-      duration: "5 Days",
-      rating: 4.9,
-      reviews: 98,
-      type: "Beach & Relax",
-    },
-    {
-      name: "Swiss Alps",
-      image: "⛰️",
-      price: "$449",
-      duration: "4 Days",
-      rating: 4.7,
-      reviews: 156,
-      type: "Adventure",
-    },
-    {
-      name: "Amazon Rainforest",
-      image: "🌿",
-      price: "$399",
-      duration: "6 Days",
-      rating: 4.9,
-      reviews: 87,
-      type: "Nature",
-    },
+  const benefits = [
+    "No upfront costs or hidden fees",
+    "Free marketing and promotion",
+    "Easy-to-use dashboard",
+    "Flexible pricing control",
+    "Verified customer reviews",
+    "Instant payment processing",
   ];
 
   const testimonials = [
     {
-      name: "Emma Johnson",
-      role: "Travel Enthusiast",
+      name: "Maria Santos",
+      role: "Adventure Tour Operator",
       content:
-        "Explorify made planning my dream vacation effortless. The platform is intuitive and the experiences are incredible!",
+        "Joining Explorify was the best decision for my business. I've tripled my bookings in just 3 months!",
       rating: 5,
-      image: "EJ",
-      location: "Bali Trip",
+      image: "MS",
+      location: "Philippines",
     },
     {
-      name: "David Chen",
-      role: "Adventure Seeker",
+      name: "John Anderson",
+      role: "Cultural Experience Host",
       content:
-        "Found the most amazing hiking trails through Explorify. The local guides were knowledgeable and the entire experience was seamless.",
+        "The platform is incredibly easy to use, and the support team is always there when I need help.",
       rating: 5,
-      image: "DC",
-      location: "Swiss Alps Adventure",
+      image: "JA",
+      location: "Thailand",
     },
     {
-      name: "Sofia Rodriguez",
-      role: "Cultural Explorer",
+      name: "Yuki Tanaka",
+      role: "Nature Guide",
       content:
-        "The cultural tours in Greece were phenomenal! Every detail was perfectly planned and the memories will last forever.",
+        "I love how I can manage everything from one place. The analytics help me understand my customers better.",
       rating: 5,
-      image: "SR",
-      location: "Santorini Experience",
+      image: "YT",
+      location: "Japan",
     },
   ];
 
   const steps = [
     {
       number: "01",
-      title: "Search & Discover",
-      description: "Browse thousands of curated travel experiences",
+      title: "Sign Up",
+      description: "Create your vendor account in minutes",
     },
     {
       number: "02",
-      title: "Compare & Choose",
-      description: "Compare prices, reviews, and itineraries",
+      title: "Create Packages",
+      description: "List your unique travel experiences",
     },
     {
       number: "03",
-      title: "Book Securely",
-      description: "Complete your booking with secure payment",
+      title: "Get Verified",
+      description: "Our team reviews and approves your profile",
     },
     {
       number: "04",
-      title: "Travel & Enjoy",
-      description: "Embark on your unforgettable journey",
+      title: "Start Earning",
+      description: "Receive bookings and grow your business",
     },
   ];
 
@@ -245,64 +170,33 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-4">
         <div className="max-w-7xl mx-auto text-center">
-          {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8 animate-fade-in">
             <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium text-primary">
-              Trusted by {stats[1].value} travelers worldwide
+              Join {stats[0].value} successful vendors
             </span>
           </div>
 
-          {/* Main Heading */}
           <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-slide-down">
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Explore the World
+              Grow Your Travel
             </span>
             <br />
-            <span className="text-foreground">Your Way</span>
+            <span className="text-foreground">Business Online</span>
           </h1>
 
-          {/* Subheading */}
           <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto animate-fade-in">
-            Discover amazing destinations, book unique experiences, and create
-            unforgettable memories with trusted local vendors.
+            Partner with Explorify to reach thousands of travelers worldwide.
+            List your unique experiences and start earning today.
           </p>
 
-          {/* Search Bar */}
-          <div className="max-w-2xl mx-auto mb-12 animate-scale-in">
-            <div className="relative bg-background/60 backdrop-blur-xl border border-border/50 rounded-full p-2 shadow-xl">
-              <div className="flex items-center gap-4">
-                <div className="flex-1 flex items-center gap-3 px-4">
-                  <MapPin className="w-5 h-5 text-muted-foreground" />
-                  <input
-                    type="text"
-                    placeholder="Where do you want to go?"
-                    className="flex-1 bg-transparent border-none outline-none text-lg placeholder:text-muted-foreground"
-                  />
-                </div>
-                <div className="flex items-center gap-3 px-4 border-l border-border/30">
-                  <Calendar className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-muted-foreground">When?</span>
-                </div>
-                <Button
-                  size="lg"
-                  className="rounded-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
-                >
-                  <Search className="w-5 h-5" />
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-scale-in">
             <Button
               size="lg"
-              onClick={handleExplore}
+              onClick={handleGetStarted}
               className="rounded-full px-8 py-6 text-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-200"
             >
-              <Compass className="w-5 h-5 mr-2" />
-              Start Exploring
+              {session ? "Go to Dashboard" : "Start Selling Today"}
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
             <Button
@@ -311,12 +205,10 @@ export default function HomePage() {
               className="rounded-full px-8 py-6 text-lg hover:bg-accent/50 transition-all duration-200"
             >
               Watch How It Works
-              <ChevronRight className="w-5 h-5 ml-2" />
             </Button>
           </div>
         </div>
 
-        {/* Floating Elements */}
         <div className="absolute top-20 left-10 w-20 h-20 bg-blue-500/10 rounded-full blur-xl animate-pulse" />
         <div className="absolute bottom-20 right-10 w-32 h-32 bg-purple-500/10 rounded-full blur-xl animate-pulse" />
       </section>
@@ -348,151 +240,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Categories Section */}
-      <section className="py-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Choose Your
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                {" "}
-                Adventure
-              </span>
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              Discover experiences tailored to your interests
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {categories.map((category, index) => {
-              const Icon = category.icon;
-              return (
-                <div
-                  key={category.id}
-                  onClick={() => setActiveTab(category.id)}
-                  className={`
-                    relative group cursor-pointer transition-all duration-300
-                    ${
-                      activeTab === category.id
-                        ? "scale-105"
-                        : "hover:scale-105"
-                    }
-                  `}
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${category.gradient} opacity-0 group-hover:opacity-20 blur-xl transition-all duration-300`}
-                  />
-                  <div
-                    className={`
-                    relative h-full bg-background/60 backdrop-blur-xl border rounded-2xl p-8 text-center transition-all duration-300
-                    ${
-                      activeTab === category.id
-                        ? "border-primary/50 bg-primary/5"
-                        : "border-border/50 hover:border-primary/50"
-                    }
-                  `}
-                  >
-                    <div
-                      className={`w-16 h-16 rounded-xl bg-gradient-to-br ${category.gradient} flex items-center justify-center mb-6 mx-auto`}
-                    >
-                      <Icon className="w-8 h-8 text-white" />
-                    </div>
-                    <h3 className="text-xl font-semibold mb-3">
-                      {category.title}
-                    </h3>
-                    <p className="text-muted-foreground text-sm">
-                      {category.description}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Destinations */}
-      <section className="py-20 px-4 bg-gradient-to-b from-transparent via-primary/5 to-transparent">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Featured Destinations
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              Handpicked experiences from around the globe
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredDestinations.map((destination, index) => (
-              <div
-                key={index}
-                onMouseEnter={() => setHoveredCard(index)}
-                onMouseLeave={() => setHoveredCard(null)}
-                className="relative group cursor-pointer"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-purple-600/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                <div className="relative bg-background/60 backdrop-blur-xl border border-border/50 rounded-2xl overflow-hidden hover:border-primary/50 transition-all duration-300 hover:-translate-y-2">
-                  <div className="aspect-video bg-gradient-to-br from-blue-500/20 to-purple-600/20 flex items-center justify-center text-6xl">
-                    {destination.image}
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">
-                        {destination.type}
-                      </span>
-                      <button className="text-muted-foreground hover:text-red-500 transition-colors">
-                        <Heart className="w-4 h-4" />
-                      </button>
-                    </div>
-                    <h3 className="font-semibold text-lg mb-2">
-                      {destination.name}
-                    </h3>
-                    <div className="flex items-center gap-2 mb-3">
-                      <Star className="w-4 h-4 fill-yellow-500 text-yellow-500" />
-                      <span className="font-medium">{destination.rating}</span>
-                      <span className="text-muted-foreground text-sm">
-                        ({destination.reviews} reviews)
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="text-2xl font-bold">
-                          {destination.price}
-                        </span>
-                        <span className="text-muted-foreground text-sm">
-                          /{destination.duration}
-                        </span>
-                      </div>
-                      <ArrowRight
-                        className={`w-5 h-5 text-primary transition-transform ${
-                          hoveredCard === index ? "translate-x-2" : ""
-                        }`}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <Button
-              size="lg"
-              variant="outline"
-              className="rounded-full px-8 py-3 hover:bg-accent/50 transition-all duration-200"
-            >
-              View All Destinations
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
       {/* Features Grid */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4 bg-gradient-to-b from-transparent via-primary/5 to-transparent">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
@@ -503,7 +252,7 @@ export default function HomePage() {
               </span>
             </h2>
             <p className="text-xl text-muted-foreground">
-              Everything you need for the perfect trip
+              Everything you need to succeed as a travel vendor
             </p>
           </div>
 
@@ -513,10 +262,9 @@ export default function HomePage() {
               return (
                 <div
                   key={index}
-                  onMouseEnter={() => setHoveredCard(index + 10)}
+                  onMouseEnter={() => setHoveredCard(index)}
                   onMouseLeave={() => setHoveredCard(null)}
                   className="relative group cursor-pointer"
-                  style={{ animationDelay: `${index * 50}ms` }}
                 >
                   <div
                     className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 blur-xl transition-all duration-300`}
@@ -533,14 +281,6 @@ export default function HomePage() {
                     <p className="text-muted-foreground">
                       {feature.description}
                     </p>
-                    <div className="mt-6 flex items-center text-primary font-medium">
-                      Learn more
-                      <ArrowRight
-                        className={`w-4 h-4 ml-2 transition-transform ${
-                          hoveredCard === index + 10 ? "translate-x-2" : ""
-                        }`}
-                      />
-                    </div>
                   </div>
                 </div>
               );
@@ -550,14 +290,14 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-20 px-4 bg-gradient-to-b from-transparent via-primary/5 to-transparent">
+      <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
               How It Works
             </h2>
             <p className="text-xl text-muted-foreground">
-              Your journey in 4 simple steps
+              Start selling in 4 simple steps
             </p>
           </div>
 
@@ -580,15 +320,41 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Benefits */}
+      <section className="py-20 px-4 bg-gradient-to-b from-transparent via-primary/5 to-transparent">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Vendor Benefits
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Everything included, no hidden costs
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {benefits.map((benefit, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-3 bg-background/60 backdrop-blur-xl border border-border/50 rounded-xl p-4 hover:border-primary/50 transition-all duration-300"
+              >
+                <CheckCircle2 className="w-6 h-6 text-green-500 shrink-0" />
+                <span className="font-medium">{benefit}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials */}
       <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Traveler Stories
+              Success Stories
             </h2>
             <p className="text-xl text-muted-foreground">
-              What our community says about their experiences
+              Hear from our thriving vendor community
             </p>
           </div>
 
@@ -598,26 +364,25 @@ export default function HomePage() {
                 key={index}
                 className="bg-background/60 backdrop-blur-xl border border-border/50 rounded-2xl p-8 hover:border-primary/50 transition-all duration-300 hover:scale-105"
               >
-                <Quote className="w-8 h-8 text-primary/20 mb-4" />
-                <p className="text-lg mb-6">{testimonial.content}</p>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
-                    {testimonial.image}
-                  </div>
-                  <div>
-                    <div className="font-semibold">{testimonial.name}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {testimonial.location}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex gap-1">
+                <div className="flex gap-1 mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star
                       key={i}
                       className="w-4 h-4 fill-yellow-500 text-yellow-500"
                     />
                   ))}
+                </div>
+                <p className="text-lg mb-6">{testimonial.content}</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                    {testimonial.image}
+                  </div>
+                  <div>
+                    <div className="font-semibold">{testimonial.name}</div>
+                    <div className="text-sm text-muted-foreground">
+                      {testimonial.role} • {testimonial.location}
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -629,49 +394,38 @@ export default function HomePage() {
       <section className="py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <div className="bg-gradient-to-br from-blue-600/10 to-purple-600/10 backdrop-blur-xl border border-border/50 rounded-3xl p-12">
+            <Trophy className="w-16 h-16 mx-auto mb-6 text-primary" />
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Ready for Your Next
+              Ready to Start
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 {" "}
-                Adventure?
+                Earning?
               </span>
             </h2>
             <p className="text-xl text-muted-foreground mb-8">
-              Join thousands of travelers who have discovered their perfect
-              getaway through Explorify.
+              Join our community of successful vendors and turn your passion
+              into profit.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                size="lg"
-                onClick={handleExplore}
-                className="rounded-full px-8 py-6 text-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-200"
-              >
-                {session ? "Explore Trips" : "Get Started"}
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-              <Link href="/vendor">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="rounded-full px-8 py-6 text-lg hover:bg-accent/50 transition-all duration-200"
-                >
-                  <Clock className="w-5 h-5 mr-2" />
-                  Become a Vendor
-                </Button>
-              </Link>
-            </div>
+            <Button
+              size="lg"
+              onClick={handleGetStarted}
+              className="rounded-full px-8 py-6 text-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-200"
+            >
+              {session ? "Go to Dashboard" : "Create Vendor Account"}
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
             <div className="flex items-center justify-center gap-8 mt-8">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-green-500" />
-                <span className="text-sm">Free to browse</span>
+                <span className="text-sm">Free to join</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-green-500" />
-                <span className="text-sm">Secure booking</span>
+                <span className="text-sm">No setup fees</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-green-500" />
-                <span className="text-sm">24/7 support</span>
+                <span className="text-sm">Start in minutes</span>
               </div>
             </div>
           </div>

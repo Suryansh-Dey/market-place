@@ -38,6 +38,7 @@ export interface DynamoDBUser {
     phoneNumber?: string;
   };
   createdAt: string;
+  updatedAt: string;
 }
 
 export interface DynamoDBPlan {

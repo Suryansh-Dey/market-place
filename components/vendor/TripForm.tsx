@@ -1,8 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/common/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { X, MapPin, DollarSign, Image, FileText } from "lucide-react";
 
 interface TripFormProps {
@@ -80,7 +86,9 @@ export function TripForm({ onClose, onSuccess, vendorId }: TripFormProps) {
                 type="text"
                 required
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="e.g., Golden Triangle Tour"
               />
@@ -95,7 +103,9 @@ export function TripForm({ onClose, onSuccess, vendorId }: TripFormProps) {
               <input
                 type="url"
                 value={formData.image}
-                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, image: e.target.value })
+                }
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="https://example.com/image.jpg"
               />
@@ -112,7 +122,9 @@ export function TripForm({ onClose, onSuccess, vendorId }: TripFormProps) {
                   type="text"
                   required
                   value={formData.startRoute}
-                  onChange={(e) => setFormData({ ...formData, startRoute: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, startRoute: e.target.value })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Starting point"
                 />
@@ -126,7 +138,9 @@ export function TripForm({ onClose, onSuccess, vendorId }: TripFormProps) {
                   type="text"
                   required
                   value={formData.endRoute}
-                  onChange={(e) => setFormData({ ...formData, endRoute: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, endRoute: e.target.value })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Destination"
                 />
@@ -143,7 +157,9 @@ export function TripForm({ onClose, onSuccess, vendorId }: TripFormProps) {
                 required
                 rows={3}
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
                 placeholder="Describe your travel experience..."
               />
@@ -160,7 +176,9 @@ export function TripForm({ onClose, onSuccess, vendorId }: TripFormProps) {
                 required
                 min="0"
                 value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, price: e.target.value })
+                }
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="0"
               />

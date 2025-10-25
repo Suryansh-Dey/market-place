@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/components/common/button";
+import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
   Mail,

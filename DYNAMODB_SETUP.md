@@ -1,3 +1,5 @@
+#OUTDATED
+
 # DynamoDB Setup for Travel Agency Marketplace
 
 This project uses AWS DynamoDB to store travel plan data. Follow these steps to set up DynamoDB integration:
